@@ -1,6 +1,9 @@
 import {
+  BadRequestException,
   ConflictException,
+  ForbiddenException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from "@nestjs/common";
 import { AdminDocument } from "../admin/schema/admin.schema";
@@ -65,16 +68,76 @@ export class AuthService {
       throw new UnauthorizedException("Email or password incorrect!");
     }
 
-    const {accessToken, refreshToken} = await this.generateTokens(admin);
+    const { accessToken, refreshToken } = await this.generateTokens(admin);
     admin.hashed_refresh_token = await bcrypt.hash(refreshToken, 7);
 
-    await admin.save()
+    await admin.save();
 
     res.cookie("refreshToken", refreshToken, {
-        maxAge: +process.env.COOKIE_TIME!,
-        httpOnly: true,
-    })
-    
-    return {admin: admin.id, accessToken}
+      maxAge: +process.env.COOKIE_TIME!,
+      httpOnly: true,
+    });
+
+    return { admin: admin.id, accessToken };
+  }
+
+  async logout(refreshToken: string, res: Response) {
+    let adminData: any;
+    try {
+      adminData = await this.jwtService.verify(refreshToken, {
+        secret: process.env.REFRESH_TOKEN_KEY,
+      });
+    } catch (error) {
+      console.log("Error on logout: ", error);
+      throw new BadRequestException(error);
+    }
+    if (!adminData) {
+      throw new ForbiddenException("Admin not verified!");
+    }
+
+    await this.adminService.updateRefreshToken(adminData.id, "");
+
+    res.clearCookie("refreshToken");
+    return { message: "Admin logged out successfully!" };
+  }
+
+  async refreshAdmin(
+    adminId: string,
+    refreshTokenFromCookie: string,
+    res: Response
+  ) {
+    const decodedToken = await this.jwtService.decode(refreshTokenFromCookie);
+    if (adminId !== decodedToken["id"]) {
+      throw new ForbiddenException("Not allowed!");
+    }
+
+    const admin = await this.adminService.findOne(adminId);
+
+    if (!admin || !admin.hashed_refresh_token) {
+      throw new NotFoundException("Admin not found!");
+    }
+
+    const tokenMatch = await bcrypt.compare(
+      refreshTokenFromCookie,
+      admin.hashed_refresh_token
+    );
+
+    if (!tokenMatch) {
+      throw new ForbiddenException("Forbidden");
+    }
+
+    const { accessToken, refreshToken } = await this.generateTokens(admin);
+    const refresh_token = await bcrypt.hash(refreshToken, 7);
+    await this.adminService.updateRefreshToken(admin.id, refresh_token);
+    res.cookie("refreshToken", refreshToken, {
+      maxAge: +process.env.COOKIE_TIME!,
+      httpOnly: true,
+    });
+    const response = {
+      message: "Admin refreshed!",
+      adminId: admin.id,
+      accessToken: accessToken,
+    };
+    return response;
   }
 }

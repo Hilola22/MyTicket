@@ -25,6 +25,15 @@ export class AdminService {
     return this.adminSchema.find();
   }
 
+  async updateRefreshToken(id: string, refreshToken: string) {
+    const updatedUser = await this.adminSchema.findByIdAndUpdate(
+      id,
+      { hashed_refresh_token: refreshToken },
+      { new: true }
+    );
+    return updatedUser;
+  }
+
   findOne(id: string) {
     return this.adminSchema.findById(id);
   }
