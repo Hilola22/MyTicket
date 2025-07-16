@@ -11,10 +11,6 @@ import { Admin, AdminSchema } from "./schema/admin.schema";
         name: Admin.name,
         schema: AdminSchema,
       },
-      // {
-      //   name: User.name,
-      //   schema: UserSchema,
-      // },
     ]),
   ],
   controllers: [AdminController],

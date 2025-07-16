@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { HydratedDocument } from "mongoose";
+import mongoose, { HydratedDocument, mongo } from "mongoose";
 import { Gender } from "../../human-category/schema/human-category.schema";
+import { Language } from "../../language/schema/language.schema";
 
 export type CustomerDocument = HydratedDocument<Customer>;
 
@@ -18,7 +19,7 @@ export class Customer {
   @Prop()
   hashed_password: string;
 
-  @Prop({required: true, unique:true})
+  @Prop({ required: true, unique: true })
   email: string;
 
   @Prop()
@@ -27,12 +28,18 @@ export class Customer {
   @Prop()
   gender: Gender;
 
-  @Prop()
-  lang_id: number;
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Language",
+    required: true,
+  })
+  language_id: mongoose.Schema.Types.ObjectId;
 
   @Prop()
   hashed_refresh_token: string;
+
+  @Prop({ default: true })
+  is_active: string;
 }
 
-export const CustomerSchema =
-  SchemaFactory.createForClass(Customer);
+export const CustomerSchema = SchemaFactory.createForClass(Customer);

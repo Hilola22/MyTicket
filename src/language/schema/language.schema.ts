@@ -7,6 +7,12 @@ export type LanguageDocument = HydratedDocument<Language>;
 export class Language {
   @Prop()
   name: string;
+
+  @Prop({
+    type: [{ type: "ObjectId", ref: "Customer" }],
+    default: [],
+  })
+  customers: string[];
 }
 
-export const LanguageSchema = SchemaFactory.createForClass(Language)
+export const LanguageSchema = SchemaFactory.createForClass(Language);

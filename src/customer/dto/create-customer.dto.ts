@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Gender } from "../../human-category/schema/human-category.schema";
+import mongoose from "mongoose";
 
 export class CreateCustomerDto {
   @ApiProperty({ example: "Ali", description: "Ismi" })
@@ -33,4 +34,11 @@ export class CreateCustomerDto {
     description: "Jinsi: male yoki female",
   })
   gender: Gender;
+
+  @ApiProperty({
+    example: "60c72b2f9b1e8e001c8e4b8a",
+    description: "Mijoz biladigan til IDsi",
+    type: String,
+  })
+  language_id: mongoose.Schema.Types.ObjectId;
 }

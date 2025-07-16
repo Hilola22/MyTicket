@@ -12,6 +12,13 @@ import { PaymentMethodModule } from './payment-method/payment-method.module';
 import { DeliveryMethodModule } from './delivery-method/delivery-method.module';
 import { HumanCategoryModule } from './human-category/human-category.module';
 import { CustomerModule } from './customer/customer.module';
+import { DistrictsModule } from './districts/districts.module';
+import { VenueModule } from './venue/venue.module';
+import { VenuePhotoModule } from './venue-photo/venue-photo.module';
+import { VenueTypesModule } from './venue-types/venue-types.module';
+import { CustomerCardModule } from './customer_card/customer_card.module';
+import { CustomerAddressModule } from './customer-address/customer-address.module';
+import { SeatModule } from './seat/seat.module';
 
 @Module({
   imports: [
@@ -30,7 +37,14 @@ import { CustomerModule } from './customer/customer.module';
     PaymentMethodModule,
     DeliveryMethodModule,
     HumanCategoryModule,
-    CustomerModule
+    CustomerModule,
+    DistrictsModule,
+    VenueModule,
+    VenuePhotoModule,
+    VenueTypesModule,
+    CustomerCardModule,
+    CustomerAddressModule,
+    SeatModule
   ],
   controllers: [],
   providers: [],

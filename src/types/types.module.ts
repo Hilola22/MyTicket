@@ -15,6 +15,6 @@ import { Types, TypesSchema } from "./schema/type.schema";
   ],
   controllers: [TypesController],
   providers: [TypesService],
-  exports: [TypesService]
+  exports: [TypesService, MongooseModule],
 })
 export class TypesModule {}
