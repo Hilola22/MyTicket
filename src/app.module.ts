@@ -21,6 +21,7 @@ import { CustomerAddressModule } from './customer-address/customer-address.modul
 import { SeatModule } from './seat/seat.module';
 import { EventModule } from './event/event.module';
 import { EventTypeModule } from './event-type/event-type.module';
+import { TicketModule } from './ticket/ticket.module';
 
 @Module({
   imports: [
@@ -48,7 +49,8 @@ import { EventTypeModule } from './event-type/event-type.module';
     CustomerAddressModule,
     SeatModule,
     EventModule,
-    EventTypeModule
+    EventTypeModule,
+    TicketModule
   ],
   controllers: [],
   providers: [],

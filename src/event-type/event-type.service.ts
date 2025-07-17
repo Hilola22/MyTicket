@@ -1,26 +1,35 @@
-import { Injectable } from '@nestjs/common';
-import { CreateEventTypeDto } from './dto/create-event-type.dto';
-import { UpdateEventTypeDto } from './dto/update-event-type.dto';
+import { Injectable } from "@nestjs/common";
+import { CreateEventTypeDto } from "./dto/create-event-type.dto";
+import { UpdateEventTypeDto } from "./dto/update-event-type.dto";
+import { InjectModel } from "@nestjs/mongoose";
+import { EventType } from "./schema/event-type.entity";
+import { Model } from "mongoose";
 
 @Injectable()
 export class EventTypeService {
+  constructor(
+    @InjectModel(EventType.name)
+    private readonly eventTypeSchema: Model<EventType>
+  ) {}
   create(createEventTypeDto: CreateEventTypeDto) {
-    return 'This action adds a new eventType';
+    return this.eventTypeSchema.create(createEventTypeDto);
   }
 
   findAll() {
-    return `This action returns all eventType`;
+    return this.eventTypeSchema.find().populate("parent_event_type_id");
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} eventType`;
+  findOne(id: string) {
+    return this.eventTypeSchema.findById(id).populate("parent_event_type_id");
   }
 
-  update(id: number, updateEventTypeDto: UpdateEventTypeDto) {
-    return `This action updates a #${id} eventType`;
+  update(id: string, updateEventTypeDto: UpdateEventTypeDto) {
+    return this.eventTypeSchema.findByIdAndUpdate(id, updateEventTypeDto, {
+      new: true,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} eventType`;
+  remove(id: string) {
+    return this.eventTypeSchema.findByIdAndDelete(id);
   }
 }

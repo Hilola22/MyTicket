@@ -4,8 +4,15 @@ import { EventController } from "./event.controller";
 import { MongooseModule } from "@nestjs/mongoose";
 import { Event, EventSchema } from "./schema/event.schema";
 import { Venue, VenueSchema } from "../venue/schema/venue.schema";
-import { HumanCategory, HumanCategorySchema } from "../human-category/schema/human-category.schema";
+import {
+  HumanCategory,
+  HumanCategorySchema,
+} from "../human-category/schema/human-category.schema";
 import { Language, LanguageSchema } from "../language/schema/language.schema";
+import {
+  EventType,
+  EventTypeSchema,
+} from "../event-type/schema/event-type.entity";
 
 @Module({
   imports: [
@@ -24,8 +31,12 @@ import { Language, LanguageSchema } from "../language/schema/language.schema";
       },
       {
         name: Language.name,
-        schema: LanguageSchema
-      }
+        schema: LanguageSchema,
+      },
+      {
+        name: EventType.name,
+        schema: EventTypeSchema,
+      },
     ]),
   ],
   controllers: [EventController],

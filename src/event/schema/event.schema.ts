@@ -1,5 +1,8 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import mongoose, { HydratedDocument, HydrateOptions } from "mongoose";
+import mongoose, { HydratedDocument, HydrateOptions, mongo } from "mongoose";
+import { EventType } from "../../event-type/schema/event-type.entity";
+import { HumanCategory } from "../../human-category/schema/human-category.schema";
+import { Language } from "../../language/schema/language.schema";
 
 export type EventDocument = HydratedDocument<Event>
 
@@ -26,14 +29,23 @@ export class Event {
   @Prop()
   info: string;
 
-  @Prop()
-  enent_type_id: bigint;
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "EventType",
+  })
+  event_type_id: EventType;
 
-  @Prop()
-  human_category_id: bigint;
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "HumanCategory",
+  })
+  human_category_id: HumanCategory;
 
-  @Prop()
-  lang_id: bigint;
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Language",
+  })
+  lang_id: Language;
 
   @Prop()
   release_date: Date;
