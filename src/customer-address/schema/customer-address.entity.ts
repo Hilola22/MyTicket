@@ -74,4 +74,4 @@ export class CustomerAddress {
   info: string;
 }
 
-export const CustomerCardSchema = SchemaFactory.createForClass(CustomerAddress);
+export const CustomerAddresschema = SchemaFactory.createForClass(CustomerAddress);
